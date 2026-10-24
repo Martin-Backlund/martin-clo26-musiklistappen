@@ -19,3 +19,37 @@ Console.WriteLine($"Musiklistappen: börja med att få menyn att fungera!  (data
 //   2. Skapa ett DbHandler-objekt: new DbHandler(connectionString)
 //   3. Anropa DbHandlers metoder från menyn. Här ska ALDRIG SQL stå.
 //   4. Avsluta snyggt när användaren väljer "Avsluta".
+
+bool körAppen = true;
+
+while (körAppen)
+{
+    Console.WriteLine("======================Musiklistappen==========================");
+    Console.WriteLine("Välj alternativ:");
+    Console.WriteLine("1) Lista alla låtar");
+    Console.WriteLine("2) Välj en låt");
+    Console.WriteLine("3) Avsluta");
+    if (!int.TryParse(Console.ReadLine(), out int val))
+    {
+        Console.WriteLine("Skriv endast nummer");
+        continue;
+    }
+    switch (val)
+        {
+        case 1:
+            Console.WriteLine("Skriver ut alla låtar.......");
+            //metod
+            break;
+        case 2:
+            Console.WriteLine("Väljer den låten.........");
+            break;
+        case 3:
+            {
+                körAppen = false;
+                break;
+            }
+    }
+    
+        
+
+}
