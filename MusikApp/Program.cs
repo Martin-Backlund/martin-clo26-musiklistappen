@@ -32,7 +32,7 @@ while (körAppen)
     Console.WriteLine("1) Lista alla låtar");
     Console.WriteLine("2) Välj en låt");
     Console.WriteLine("3) Sök efter låt");
-    Console.WriteLine("4) Sök efter låt med album");
+    Console.WriteLine("4) Visa låtar med album");
     Console.WriteLine("5) Avsluta");
     Console.WriteLine("==============================================================");
     if (!int.TryParse(Console.ReadLine(), out int val))
@@ -66,7 +66,7 @@ while (körAppen)
             var traffar = db.SearchSongs(titel);
 
             if (traffar.Count == 0) Console.WriteLine("Inga låtar hittades");
-            Console.WriteLine($"{traffar.Count} Resultat hittades:");
+            else Console.WriteLine($"{traffar.Count} Resultat hittades:");
             foreach (var song in traffar)
             {
                 
