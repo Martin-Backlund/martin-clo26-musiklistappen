@@ -113,9 +113,29 @@ public class DbHandler
     /// <summary>Söker låtar där titeln innehåller söktexten.</summary>
     public List<Song> SearchSongs(string searchText)
     {
-        // TODO: SELECT ... WHERE Titel LIKE @sok.
-        // Tips: parametervärdet ska vara "%" + searchText + "%" så att LIKE matchar delar av titeln.
-        throw new NotImplementedException();
+        var songs = new List<Song>();
+        using var connection = new SqliteConnection(_connectionString);
+        connection.Open();
+        using var command = connection.CreateCommand();
+        command.CommandText = "SELECT id,titel,langd,nummer,album_id FROM song WHERE titel LIKE @sok";
+        command.Parameters.AddWithValue("@sok", "%" + searchText +"%");
+
+        using var reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+            songs.Add(new Song
+            {
+                Id = reader.GetInt32(0),
+                Titel = reader.GetString(1),
+                Langd = reader.GetInt32(2),
+                Nummer = reader.IsDBNull(3) ? null : reader.GetInt32(3),
+                Albumid = reader.GetInt32(4)
+            });
+        }
+        return songs;
+            // TODO: SELECT ... WHERE Titel LIKE @sok.
+            // Tips: parametervärdet ska vara "%" + searchText + "%" så att LIKE matchar delar av titeln.
+           
     }
 
     /// <summary>Lägger till en ny låt.</summary>

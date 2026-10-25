@@ -13,7 +13,7 @@ var connectionString = config.GetConnectionString("Default")
     ?? throw new InvalidOperationException("Hittar ingen connection string 'Default' i appsettings.json.");
 
 // Börja här. Den här raden visar att inställningarna lästes in, ta bort den när du vill.
-Console.WriteLine($"Musiklistappen: börja med att få menyn att fungera!  (databas: {connectionString})");
+
 
 // Tips på ordning (se UPPGIFT.md):
 //   1. Rita upp huvudmenyn (alternativ numrerade 1-N) och läs in ett val med Console.ReadLine().
@@ -31,7 +31,9 @@ while (körAppen)
     Console.WriteLine("Välj alternativ:");
     Console.WriteLine("1) Lista alla låtar");
     Console.WriteLine("2) Välj en låt");
-    Console.WriteLine("3) Avsluta");
+    Console.WriteLine("3) Sök efter låt");
+    Console.WriteLine("4) Avsluta");
+    Console.WriteLine("==============================================================");
     if (!int.TryParse(Console.ReadLine(), out int val))
     {
         Console.WriteLine("Skriv endast nummer");
@@ -49,7 +51,7 @@ while (körAppen)
             Console.WriteLine("Vilken låt vill du välja? (skriv ID)");
             if (!int.TryParse(Console.ReadLine(), out int id))
             {
-                Console.WriteLine("Skriv ett endast siffror");
+                Console.WriteLine("Skriv endast siffror");
                 continue;
             }
             var song2 = db.GetSongById(id);
@@ -58,6 +60,20 @@ while (körAppen)
                 Console.WriteLine($"{song2.Titel}, {song2.Langd / 60}:{song2.Langd % 60:D2}, spår {song2.Nummer}");
             break;
         case 3:
+            Console.WriteLine("Skriv in titel:");
+            var titel = Console.ReadLine() ??"";
+            var träffar = db.SearchSongs(titel);
+
+            if (träffar.Count == 0) Console.WriteLine("Inga låtar hittades");
+            Console.WriteLine($"{träffar.Count} Resultat hittades:");
+            foreach (var song in träffar)
+            {
+                
+                Console.WriteLine($"Id: ({song.Id}). {song.Titel}");
+                
+            }
+            break;
+        case 4:
             {
                 körAppen = false;
                 break;
