@@ -1,5 +1,7 @@
 using Microsoft.Data.Sqlite;
+using System.Numerics;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MusikApp;
@@ -75,10 +77,38 @@ public class DbHandler
     /// <summary>Hämtar en specifik låt. Returnerar null om den inte finns.</summary>
     public Song? GetSongById(int id)
     {
+       
+        using var connection = new SqliteConnection(_connectionString);
+        connection.Open();
+        using var command = connection.CreateCommand();
+        command.CommandText = "SELECT id,titel,langd,nummer,album_id FROM song WHERE id = @id";
+        command.Parameters.AddWithValue("@id", id);
+
+        using var reader = command.ExecuteReader();
+        if (reader.Read())
+        {
+            return new Song
+            {
+
+
+                Id = reader.GetInt32(0),
+                Titel = reader.GetString(1),
+                Langd = reader.GetInt32(2),
+                Nummer = reader.IsDBNull(3) ? null : reader.GetInt32(3),
+                Albumid = reader.GetInt32(4)
+            };
+        }
+        else return null;
+
+
+
+        }
+        
+        
         // TODO: SELECT ... WHERE Id = @id (parameter!).
         // TODO: if (reader.Read()) { ... } annars returnera null.
-        throw new NotImplementedException();
-    }
+        
+    
 
     /// <summary>Söker låtar där titeln innehåller söktexten.</summary>
     public List<Song> SearchSongs(string searchText)

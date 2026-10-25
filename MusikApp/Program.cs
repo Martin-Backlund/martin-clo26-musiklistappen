@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using MusikApp;
+using System.Security.Cryptography;
 
 // Läser inställningar från appsettings.json (samma sätt som i hero_databas).
 // Databasens sökväg ligger där, så du slipper skriva den i koden.
@@ -45,8 +46,16 @@ while (körAppen)
             }
             break;
         case 2:
-            Console.WriteLine("Väljer den låten.........");
-            
+            Console.WriteLine("Vilken låt vill du välja? (skriv ID)");
+            if (!int.TryParse(Console.ReadLine(), out int id))
+            {
+                Console.WriteLine("Skriv ett endast siffror");
+                continue;
+            }
+            var song2 = db.GetSongById(id);
+            if (song2 == null) Console.WriteLine("Finns ingen låt med det id:t");
+            else
+                Console.WriteLine($"{song2.Titel}, {song2.Langd / 60}:{song2.Langd % 60:D2}, spår {song2.Nummer}");
             break;
         case 3:
             {
