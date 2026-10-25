@@ -32,7 +32,8 @@ while (körAppen)
     Console.WriteLine("1) Lista alla låtar");
     Console.WriteLine("2) Välj en låt");
     Console.WriteLine("3) Sök efter låt");
-    Console.WriteLine("4) Avsluta");
+    Console.WriteLine("4) Sök efter låt med album");
+    Console.WriteLine("5) Avsluta");
     Console.WriteLine("==============================================================");
     if (!int.TryParse(Console.ReadLine(), out int val))
     {
@@ -62,11 +63,11 @@ while (körAppen)
         case 3:
             Console.WriteLine("Skriv in titel:");
             var titel = Console.ReadLine() ??"";
-            var träffar = db.SearchSongs(titel);
+            var traffar = db.SearchSongs(titel);
 
-            if (träffar.Count == 0) Console.WriteLine("Inga låtar hittades");
-            Console.WriteLine($"{träffar.Count} Resultat hittades:");
-            foreach (var song in träffar)
+            if (traffar.Count == 0) Console.WriteLine("Inga låtar hittades");
+            Console.WriteLine($"{traffar.Count} Resultat hittades:");
+            foreach (var song in traffar)
             {
                 
                 Console.WriteLine($"Id: ({song.Id}). {song.Titel}");
@@ -74,7 +75,17 @@ while (körAppen)
             }
             break;
         case 4:
+            foreach (var (songs, album) in db.GetSongsWithAlbum())
             {
+                Console.WriteLine($"{album}: {songs} ");
+            }
+            break;
+        case 5:
+            {
+                for (int i = 0; i < 10000; i++)
+                {
+                    Console.Write("=");
+                }
                 körAppen = false;
                 break;
             }

@@ -141,6 +141,7 @@ public class DbHandler
     /// <summary>Lägger till en ny låt.</summary>
     public void AddSong(Song song)
     {
+
         // TODO: INSERT INTO ... VALUES (@titel, @langd, ...) med parametrar.
         // Tips: INSERT ger ingen data tillbaka, så använd ExecuteNonQuery().
         throw new NotImplementedException();
@@ -162,8 +163,19 @@ public class DbHandler
     /// <summary>(VG, alternativ A) Låtar tillsammans med albumets namn. Kräver en JOIN.</summary>
     public List<(string SongTitle, string AlbumName)> GetSongsWithAlbum()
     {
+        var resultat = new List<(string SongTitle, string AlbumName)>();
+        using var connection = new SqliteConnection(_connectionString);
+        connection.Open();
+        using var command = connection.CreateCommand();
+        command.CommandText = "SELECT song.titel, album.titel FROM song JOIN album ON song.album_id = album.id ORDER BY album.titel, song.nummer";
+        using var reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+            resultat.Add((reader.GetString(0), reader.GetString(1)));
+        }
+        return resultat;
         // TODO: SELECT Låtar.Titel, Album.Namn FROM Låtar JOIN Album ON ... ORDER BY ...
-        throw new NotImplementedException();
+        
     }
 
     /// <summary>(VG, alternativ B) Låtar som är längre än medellängden. Kräver en subquery.</summary>
