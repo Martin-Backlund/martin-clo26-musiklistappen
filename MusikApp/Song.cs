@@ -10,7 +10,7 @@ public class Song
 {
     public int Id { get; set; }
     public string? Titel { get; set; }
-    public string? Langd { get; set; }
+    public int Langd { get; set; }
     public int? Nummer { get; set; } // kan vara null
     public int Albumid { get; set; }
 

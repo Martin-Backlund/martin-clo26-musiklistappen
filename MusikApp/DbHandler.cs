@@ -1,4 +1,6 @@
 using Microsoft.Data.Sqlite;
+using System.Runtime.CompilerServices;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MusikApp;
 
@@ -20,14 +22,19 @@ namespace MusikApp;
 /// </summary>
 public class DbHandler
 {
+    private string _connectionString;
+
+
     // Tips: spara bara connection string här. Den kommer från appsettings.json
     // via Program.cs (t.ex. "Data Source=musik.db").
     // Öppna sedan en NY anslutning inuti varje metod nedan.
 
     public DbHandler(string connectionString)
     {
+        _connectionString = connectionString;
+
         // TODO: spara connectionString i ett fält som metoderna nedan kan använda.
-        throw new NotImplementedException();
+        
     }
 
     // ---------------------------------------------------------------
@@ -37,10 +44,32 @@ public class DbHandler
     /// <summary>Hämtar alla låtar, sorterade på titel.</summary>
     public List<Song> GetAllSongs()
     {
+        var songs = new List<Song>();
+
+        using var connection = new SqliteConnection(_connectionString);
+        connection.Open();
+
+        using var command = connection.CreateCommand();
+        command.CommandText = "SELECT id,titel,langd,nummer,album_id FROM song ORDER BY titel";
+
+        using var reader = command.ExecuteReader();
+        while (reader.Read())
+        {
+            songs.Add(new Song
+            {
+                Id = reader.GetInt32(0),
+                Titel = reader.GetString(1),
+                Langd = reader.GetInt32(2),
+                Nummer = reader.IsDBNull(3) ? null : reader.GetInt32(3),
+                Albumid = reader.GetInt32(4)
+            });
+        }
+        return songs;
+        
         // TODO: SELECT från din låt-tabell med ORDER BY.
         // TODO: loopa med reader.Read() och gör ett Song-objekt av varje rad.
         // Tips: reader.GetInt32(0), reader.GetString(1) ... eller reader["Titel"].
-        throw new NotImplementedException();
+        
     }
 
     /// <summary>Hämtar en specifik låt. Returnerar null om den inte finns.</summary>

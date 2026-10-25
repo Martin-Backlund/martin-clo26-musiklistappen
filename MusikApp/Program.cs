@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Configuration;
+using MusikApp;
 
 // Läser inställningar från appsettings.json (samma sätt som i hero_databas).
 // Databasens sökväg ligger där, så du slipper skriva den i koden.
@@ -19,6 +20,7 @@ Console.WriteLine($"Musiklistappen: börja med att få menyn att fungera!  (data
 //   2. Skapa ett DbHandler-objekt: new DbHandler(connectionString)
 //   3. Anropa DbHandlers metoder från menyn. Här ska ALDRIG SQL stå.
 //   4. Avsluta snyggt när användaren väljer "Avsluta".
+var db = new DbHandler(connectionString);
 
 bool körAppen = true;
 
@@ -37,17 +39,22 @@ while (körAppen)
     switch (val)
         {
         case 1:
-            Console.WriteLine("Skriver ut alla låtar.......");
-            //metod
+            foreach (var song in db.GetAllSongs())
+                {
+                Console.WriteLine($"{song.Id}. {song.Titel} ({song.Langd / 60}: {song.Langd % 60:D2})");
+            }
             break;
         case 2:
             Console.WriteLine("Väljer den låten.........");
+            
             break;
         case 3:
             {
                 körAppen = false;
                 break;
             }
+        default: { Console.WriteLine("Ogiltigt val"); break; } 
+            
     }
     
         
