@@ -1,26 +1,24 @@
-# Musiklistappen — [Ditt namn]
-
-> **Instruktion till dig:** den här filen är *din* README. Ersätt all text i hakparenteser med din egen, och ta bort den här rutan när du är klar. Uppgiften och kraven står i [`UPPGIFT.md`](UPPGIFT.md), och inlämningen beskrivs i [`INLAMNING.md`](INLAMNING.md).
+# Musiklistappen — Martin Bäcklund
 
 ---
 
 ## Vad appen gör
 
-[Skriv här: två till tre meningar om din app. Vilken artist handlar den om och vad kan man göra i menyn?]
+Det är en konsollapp i C# som hanterar några av Beatles musik ifrån en SQLite databas. I appen kan man lista alla låtar, välja en särskild låt via låtens id, söka på titel och visa alla låtar tillsamans med vilket album de ligger på.
 
 ## Så kör du den
 
 ```bash
-git clone [länk till din fork]
-cd [mappens namn]/MusikApp
+git clone https://github.com/Martin-Backlund/martin-clo26-musiklistappen.git
+cd martin-clo26-musiklistappen/MusikApp
 dotnet run
 ```
 
-[Skriv här om något behöver göras först, t.ex. att `musik.db` ska ligga i mappen `MusikApp/`.]
+"Databasen musik.db ligger redan i Musik.App/"
 
 ## Så ser huvudmenyn ut
 
-[Lägg in en screenshot här. Spara bilden i repot och länka den: `![Huvudmenyn](bild.png)`]
+![Huvudmenyn](Huvudmenyn.png)
 
 ---
 
@@ -30,12 +28,12 @@ dotnet run
 
 1. **Hur designade du din databas? Varför valde du just den strukturen?**
 
-   [Skriv här]
+   Databasen har fem tabeller: artist,album,song,member och song_writer. En artist har flera album och ett album har flera låtar därför pekar album på artist och song på album med foreign keys. song_writer är en kopplingstabell eftersom att en låt kan ha flera låtskrivare och en medlem kjan ha skrivit fllera låtar. På så sätt lagras varje sak  bara en gång.
 
 2. **Vilket SQL-krav valde du (JOIN eller subquery) och varför passade det din app?**
 
-   [Skriv här]
+   Jag valde JOIN. Låtarna och albumen ligger i olika tabeller och i song finns bara album_id. För att kunna visa albumets namn bredvid låten behövde jag slå ihop song och album med JOIN album on song.album_id = album.id. Det passade bra eftersom att det är så min databas är uppbyggd.
 
 3. **Vad skulle du gjort annorlunda om du byggde om den från scratch?**
 
-   [Skriv här]
+   Jag skulle byta språk på tabell och kolumnnamn till engelska för att slippa förvirring. Jag skulle också lägga in en metod så utskriften av en låt endast sker på ett ställe i en metod för att undvika upprepning i koden.
